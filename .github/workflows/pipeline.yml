@@ -44,7 +44,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-      - name: Debug
-        env:
-          COMMITS: ${{ join(github.event.commits.*.message, ' ') }}
-        run: echo "$COMMITS"
