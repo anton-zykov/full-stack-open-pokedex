@@ -33,13 +33,13 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }}
         run: curl https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      - name: Test Failure
-        uses: rjstone/discord-webhook-notify@v1.0.4
+      - name: Discord Webhook Notify
+        uses: sarisia/actions-status-discord@v1
         if: failure()
         with:
-          severity: error
-          details: Build Failed!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: 'Build failed'
+          status: ${{ job.status }}
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     needs: [ simple_deployment_pipeline ]
@@ -52,9 +52,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
       - name: Discord Webhook Notify
-        uses: rjstone/discord-webhook-notify@v1.0.4
-        if: success()
+        uses: sarisia/actions-status-discord@v1
+        if: always()
         with:
-          severity: info
-          details: A new version of Pokedox deployed
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: 'New version'
+          status: ${{ job.status }}
+          description: |
+            Version `${{ github.event.release.tag_name }}`
+            Click [here](${{ github.event.release.html_url }}) to see!
