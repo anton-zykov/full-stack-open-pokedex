@@ -11,6 +11,6 @@ npm install
 
 # Build the project using Webpack
 echo "Building the project with Webpack..."
-npm run build
+npm run buil
 
 echo "Build completed successfully."

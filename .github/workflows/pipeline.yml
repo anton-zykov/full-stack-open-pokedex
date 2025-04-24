@@ -58,6 +58,3 @@ jobs:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: 'New version'
           status: ${{ job.status }}
-          description: |
-            Version `${{ github.event.release.tag_name }}`
-            Click [here](${{ github.event.release.html_url }}) to see!
